@@ -1,44 +1,18 @@
-All of the visual studio dlls are here because the people behind wiiuse are very smart and made it so I had to compile with visual studios (as far as im lazy enough to do so).
+Some important details to include
 
-these should be accessible via Environment paths but just for the sake of inclusivity i put them here as well
+Button Codes:
+	* The DLL I compiled returns codes which are supposed to be enums in C which get casted to chars.
+	* I've taken the liberty to simply document what these seemingly random #'s mean so here you go:
 
+	* Event ID's (event.type)
+		* 0 --> No event ocurred on wiimote
+		* 1 --> Button Pressed Event ocurred on wiimtoe
+		* 2 --> Button Released Event ocurred on wiimote
 
+	* Butt ID's
+		* 0 --> 1 button on wiimote
+		* 1 --> 2 button on wiimote
+		* 2 --> b back button on wiimote
+		* 6 --> D-Pad left on wiimote
 
-
-[Extra code that is unused]
-
-noJerkBuffer = 5 # 5 frames not jerking
-jerkBufffer = 3 # 3 frames of jerking
-
-jerkThreshold = 10
-
-framesNotJerking = 5 # stores how many not jerking
-framesJerking = 3 # stores how many jerking
-
-lastFrameAccel = [0,0,0]
-
-def UpdateJerkCounter():
-    jerkMag = (accelData[0] - lastFrameAccel[0]) ** 2 + (accelData[1] - lastFrameAccel[1]) ** 2 + (accelData[2] - lastFrameAccel[2]) ** 2 / 0.016
-
-    global framesNotJerking
-    global framesJerking
-
-    if jerkMag < jerkThreshold:
-        framesNotJerking += 1
-        framesJerking = min(4, max(0, framesJerking * 0.9))
-    else:
-        framesNotJerking = 0
-        framesJerking += 2
-
-    lastFrameAccel[0] = accelData[0]
-    lastFrameAccel[1] = accelData[1]
-    lastFrameAccel[2] = accelData[2]
-
-in main loop
-
-UpdateJerkCounter()
-
-        if framesNotJerking < noJerkBuffer and framesJerking > jerkBufffer:
-            gamepad.press_button(vgamepad.DS4_BUTTONS.DS4_BUTTON_CROSS)
-        elif framesJerking < jerkBufffer and framesNotJerking > noJerkBuffer:
-            gamepad.release_button(vgamepad.DS4_BUTTONS.DS4_BUTTON_CROSS)    
+	* As a final note you can also find these in the source code for the C code if you want more details
