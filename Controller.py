@@ -9,19 +9,26 @@ def WakeUpGamepad(gamepad: vgamepad.VDS4Gamepad):
     gamepad.press_button(button=vgamepad.DS4_BUTTONS.DS4_BUTTON_CIRCLE)
     gamepad.update()
 
-    sleep(0.1) # giving time for it to register
+    sleep(0.05) # giving time for it to register
 
     gamepad.release_button(button=vgamepad.DS4_BUTTONS.DS4_BUTTON_CIRCLE)
     gamepad.update()
 
-    sleep(0.1) 
+    sleep(0.05) 
 
-def PressButton(buttID):
+def InitGamepads():
+    connected = GetConnectedWiimotes()
+
+    for i in range(connected):
+        gamepads[i] = vgamepad.VDS4Gamepad()
+        WakeUpGamepad(gamepads[i])
+
+def PressButton(buttID, gamepad: vgamepad.VDS4Gamepad):
     match buttID:
         case _: # this is filler code; replace with your own button mappings
             pass
 
-def ReleaseButton(buttID):
+def ReleaseButton(buttID, controllerID):
     match buttID:
         case _:
             pass
@@ -30,10 +37,12 @@ def HandleEvents():
     global bottomEvent
 
     while bottomEvent.type != 0:
+        print(f"event recieved wiimote {bottomEvent.controllerID}")
+
         if bottomEvent.type == 1:
-            PressButton(bottomEvent.eventInfo)
+            PressButton(bottomEvent.eventInfo, gamepads[bottomEvent.controllerID])
         elif bottomEvent.type == 2:
-            ReleaseButton(bottomEvent.eventInfo)
+            ReleaseButton(bottomEvent.eventInfo, gamepads[bottomEvent.controllerID])
 
         wiimoteLib.PopBottomEventSafe()
         bottomEvent = wiimoteLib.ReadBottomEventSafe()
@@ -46,18 +55,20 @@ def OnWiimoteStartTracking():
 
         if bottomEvent.type != 0:
             HandleEvents()
-        
-        gamepad.update()
+
         sleep(0.0166) # 60hz polling rate
 
-gamepad = vgamepad.VDS4Gamepad()
+gamepads = {}
 wiimoteLib = InitLib()
 
 AttemptTracking()
 
 if IsCurrentlyTracking():
-    WakeUpGamepad(gamepad)
+    InitGamepads()
 
+    wiimoteLib.ListenButtonSafe(GetButtonID("one"))
+
+    wiimoteLib.SetAccelTracking(ctypes.byref(ctypes.c_char(1)))
     OnWiimoteStartTracking()
 else:
     print("Failed to track wiimote")
