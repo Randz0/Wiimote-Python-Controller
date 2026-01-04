@@ -37,8 +37,6 @@ def HandleEvents():
     global bottomEvent
 
     while bottomEvent.type != 0:
-        print(f"event recieved wiimote {bottomEvent.controllerID}")
-
         if bottomEvent.type == 1:
             PressButton(bottomEvent.eventInfo, gamepads[bottomEvent.controllerID])
         elif bottomEvent.type == 2:
@@ -56,6 +54,9 @@ def OnWiimoteStartTracking():
         if bottomEvent.type != 0:
             HandleEvents()
 
+        for i in range(len(gamepads)):
+            gamepads[i].update()
+
         sleep(0.0166) # 60hz polling rate
 
 gamepads = {}
@@ -65,9 +66,7 @@ AttemptTracking()
 
 if IsCurrentlyTracking():
     InitGamepads()
-
-    wiimoteLib.ListenButtonSafe(GetButtonID("one"))
-
+    
     wiimoteLib.SetAccelTracking(ctypes.byref(ctypes.c_char(1)))
     OnWiimoteStartTracking()
 else:
