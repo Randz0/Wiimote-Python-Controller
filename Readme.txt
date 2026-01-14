@@ -19,4 +19,6 @@ Button Codes:
 		* 7 --> D-Pad right
 		* 8 --> plus button
 
+	* This version was intended to be used with the older version of the C library so please compile with that version.
+
 	* As a final note you can also find these in the source code for the C code if you want more details
