@@ -20,6 +20,8 @@ Button Codes:
 		* 7 --> D-Pad right
 		* 8 --> plus button
 
+* Also this uses the version of the C files with motionOutputs to store data, so it will only be functional with that version.
+
 Importantly the home button is reserved for issuing manual disconnects in the library so it will remain unmappable
 
 	* As a final note you can also find these in the source code for the C code if you want more details
