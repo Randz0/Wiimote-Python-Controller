@@ -24,3 +24,6 @@ Button Codes:
 * This version was intended to be used with the older version of the C library so please compile with that version.
 
 Compiled Lib files can be found at https://drive.google.com/drive/folders/1vwJbliHHx02tWPJZjSIqG2YUNjOtxqDJ?usp=sharing
+
+The C Lib source can be found on my account at: https://github.com/Randz0/Wiimote-Input-C-Code
+The Wiiuse fork can be found account at: https://github.com/Randz0/Wiiuse-C-library-Fork-Changes
